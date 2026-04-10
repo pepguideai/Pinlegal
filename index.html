@@ -442,15 +442,15 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         <!-- Affirmative checkbox consent -->
         <div id="tos-err" style="font-size:13px;color:var(--red);margin-bottom:10px;display:none">Please read and check all boxes to continue.</div>
         <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:6px">
-          <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:var(--bg2);border-radius:var(--r);border:1.5px solid var(--border2)" id="tos-lbl-1" onclick="toggleTos(1)">
+          <div style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:var(--bg2);border-radius:var(--r);border:1.5px solid var(--border2)" id="tos-lbl-1" onclick="toggleTos(1)">
             <div style="width:24px;height:24px;border-radius:6px;border:2px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--bg3);margin-top:1px;transition:all 0.15s" id="tos-box-1"></div>
             <span style="font-size:13px;color:var(--text2);line-height:1.6">I understand PIN is for <strong style="color:var(--text)">research and educational purposes only</strong> and not a substitute for medical advice.</span>
-          </label>
-          <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:var(--bg2);border-radius:var(--r);border:1.5px solid var(--border2)" id="tos-lbl-2" onclick="toggleTos(2)">
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:var(--bg2);border-radius:var(--r);border:1.5px solid var(--border2)" id="tos-lbl-2" onclick="toggleTos(2)">
             <div style="width:24px;height:24px;border-radius:6px;border:2px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--bg3);margin-top:1px;transition:all 0.15s" id="tos-box-2"></div>
             <span style="font-size:13px;color:var(--text2);line-height:1.6">I am <strong style="color:var(--text)">18 years of age or older</strong> and take full responsibility for complying with laws in my jurisdiction.</span>
-          </label>
-          <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:var(--bg2);border-radius:var(--r);border:1.5px solid var(--border2)" id="tos-lbl-3" onclick="toggleTos(3)">
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:var(--bg2);border-radius:var(--r);border:1.5px solid var(--border2)" id="tos-lbl-3" onclick="toggleTos(3)">
             <div style="width:24px;height:24px;border-radius:6px;border:2px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--bg3);margin-top:1px;transition:all 0.15s" id="tos-box-3"></div>
             <span style="font-size:13px;color:var(--text2);line-height:1.6">I have read and agree to PIN&apos;s <span style="color:var(--green);cursor:pointer" onclick="openSh('sh-full-tos')">Terms of Service</span> and <span style="color:var(--green);cursor:pointer" onclick="openSh('sh-privacy')">Privacy Policy</span>.</span>
           </label>
@@ -1174,25 +1174,7 @@ function showSlide(idx) {
   });
 }
 
-// ── LEGAL: TOS checkbox state ──
-var tosChecked = {1: false, 2: false, 3: false};
-function toggleTos(n) {
-  tosChecked[n] = !tosChecked[n];
-  var box = document.getElementById('tos-box-' + n);
-  var lbl = document.getElementById('tos-lbl-' + n);
-  if (tosChecked[n]) {
-    box.textContent = '✓';
-    box.style.background = 'var(--green)';
-    box.style.borderColor = 'var(--green)';
-    box.style.color = '#0f0e0c';
-    lbl.style.borderColor = 'var(--green)';
-  } else {
-    box.textContent = '';
-    box.style.background = 'var(--bg3)';
-    box.style.borderColor = 'var(--border2)';
-    lbl.style.borderColor = 'var(--border2)';
-  }
-}
+// ── LEGAL: TOS checkbox state (see toggleTos below) ──
 
 function pickOpt(el, key) {
   el.parentElement.querySelectorAll('.ob-opt').forEach(function(o) { o.classList.remove('sel'); });
@@ -1277,15 +1259,17 @@ function toggleTos(n) {
   tosChecked[n] = !tosChecked[n];
   var box = document.getElementById('tos-box-' + n);
   var lbl = document.getElementById('tos-lbl-' + n);
-  if (box) {
-    box.textContent = tosChecked[n] ? '✓' : '';
-    box.style.background = tosChecked[n] ? 'var(--green)' : 'var(--bg3)';
-    box.style.borderColor = tosChecked[n] ? 'var(--green)' : 'var(--border2)';
-    box.style.color = '#0f0e0c';
-  }
-  if (lbl) {
-    lbl.style.borderColor = tosChecked[n] ? 'rgba(126,232,162,0.4)' : 'var(--border2)';
-    lbl.style.background = tosChecked[n] ? 'rgba(126,232,162,0.06)' : 'var(--bg2)';
+  if (!box || !lbl) return;
+  box.textContent = tosChecked[n] ? '✓' : '';
+  box.style.background = tosChecked[n] ? 'var(--green)' : 'var(--bg3)';
+  box.style.borderColor = tosChecked[n] ? 'var(--green)' : 'var(--border2)';
+  box.style.color = tosChecked[n] ? '#0f0e0c' : 'transparent';
+  lbl.style.borderColor = tosChecked[n] ? 'rgba(126,232,162,0.4)' : 'var(--border2)';
+  lbl.style.background = tosChecked[n] ? 'rgba(126,232,162,0.06)' : 'var(--bg2)';
+  // Hide error if all 3 now checked
+  if (tosChecked[1] && tosChecked[2] && tosChecked[3]) {
+    var err = document.getElementById('tos-err');
+    if (err) err.style.display = 'none';
   }
 }
 
@@ -2437,14 +2421,15 @@ function linkPeps(text) {
 // ════════════════════════════════════════════════════════════
 // Returning user flow — verify TOS still accepted
 function returningUserEnter() {
-  var tosData = localStorage.getItem('pin_tos_accepted');
-  if (!tosData) {
-    // TOS not accepted yet — run from TOS slide
-    obStep = 1; showSlide(1); obUpdateUI();
-    document.getElementById('ob-back-btn').style.display = 'none';
+  // Returning users who completed onboarding go straight to the app.
+  // TOS was accepted during their original onboarding flow.
+  if (S.onboarded) {
+    enterApp('track');
     return;
   }
-  enterApp('track');
+  // New user who somehow landed on the home screen — send to TOS
+  obStep = 1; showSlide(1); obUpdateUI();
+  document.getElementById('ob-back-btn').style.display = 'none';
 }
 
 if ('serviceWorker' in navigator) {
